@@ -1,0 +1,37 @@
+name: TeleportationsX
+main: Rushil13579\TeleportationsX\TeleportationsX
+api: 4.0.0
+version: 1.0.0
+author: Rushil13579
+
+permissions:
+  teleportationsx.spawn:
+    default: op
+    description: Teleport to the server spawn
+  teleportationsx.setspawn:
+    default: op
+    description: Set the server spawn
+  teleportationsx.warp:
+    default: op
+    description: Teleport to a warp
+  teleportationsx.warps:
+    default: op
+    description: Get a list of all available warps
+  teleportationsx.addwarp:
+    default: op
+    description: Add a new warp to the server
+  teleportationsx.delwarp:
+    default: op
+    description: Remove a warp from the server
+  teleportationsx.home:
+    default: op
+    description: Teleport to a home
+  teleportationsx.homes:
+    default: op
+    description: Get a list of all available homes
+  teleportationsx.addhome:
+    default: op
+    description: Add a new home
+  teleportationsx.delhome:
+    default: op
+    description: Remove a home
