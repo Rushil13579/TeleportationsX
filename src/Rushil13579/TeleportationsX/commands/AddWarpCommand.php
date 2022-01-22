@@ -2,23 +2,23 @@
 
 namespace Rushil13579\TeleportationsX\commands;
 
+use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
-use pocketmine\command\Command;
+use Rushil13579\TeleportationsX\managers\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
-use pocketmine\utils\TextFormat as C;
 
 class AddWarpCommand extends Command implements PluginOwned {
 
     public function __construct() {
         parent::__construct("addwarp");
-        $this->setDescription("Add a new warp to the server");
-        $this->setUsage("/addwarp [name]");
+        $this->setDescription(DataManager::getMessage("addwarp_description"));
+        $this->setUsage(DataManager::getMessage("addwarp_usage"));
         $this->setAliases(["setwarp"]);
         $this->setPermission("teleportationsx.addwarp");
-        $this->setPermissionMessage(C::RED . "You don't have permission to use this command");
+        $this->setPermissionMessage(DataManager::getMessage("no_perm"));
     }
 
     /**
@@ -28,16 +28,16 @@ class AddWarpCommand extends Command implements PluginOwned {
      * @return mixed|void
      */
     public function execute(CommandSender $sender, string $commandLabel, array $args) {
-        if(!$sender instanceof Player){
-            $sender->sendMessage(C::RED . "Please use this command in-game");
+        if(!$sender instanceof Player) {
+            $sender->sendMessage(DataManager::getMessage("not_player"));
             return;
         }
 
         if(!$this->testPermission($sender))
             return;
 
-        if(count($args) < 1){
-            $sender->sendMessage(C::RED . $this->getUsage());
+        if(count($args) < 1) {
+            $sender->sendMessage(DataManager::getMessage("addwarp_usage"));
             return;
         }
 
@@ -45,12 +45,13 @@ class AddWarpCommand extends Command implements PluginOwned {
 
         $warpManager = TeleportationsX::getInstance()->getWarpManager();
 
-        if($warpManager->warpExists($name)){
-            $sender->sendMessage(C::RED . "This warp already exists. You must remove it first");
+        if($warpManager->warpExists($name)) {
+            $sender->sendMessage(DataManager::getMessage("warp_already_exists"));
             return;
         }
 
         $warpManager->addWarp($name, $sender->getPosition());
+        $sender->sendMessage(DataManager::getMessage("warp_added_successfully"));
     }
 
     /**

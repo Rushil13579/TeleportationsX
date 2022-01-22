@@ -4,7 +4,6 @@ namespace Rushil13579\TeleportationsX\managers;
 
 use pocketmine\Server;
 use pocketmine\world\Position;
-use Rushil13579\TeleportationsX\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
 
 class SpawnManager {

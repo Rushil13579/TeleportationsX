@@ -2,9 +2,11 @@
 
 namespace Rushil13579\TeleportationsX\managers;
 
+use pocketmine\permission\DefaultPermissions;
+use pocketmine\permission\Permission;
+use pocketmine\permission\PermissionManager;
 use pocketmine\Server;
 use pocketmine\world\Position;
-use Rushil13579\TeleportationsX\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
 
 class WarpManager {
@@ -29,6 +31,17 @@ class WarpManager {
         $this->getMain()->prepare->bindValue(":y", $position->getFloorY(), SQLITE3_TEXT);
         $this->getMain()->prepare->bindValue(":z", $position->getFloorZ(), SQLITE3_TEXT);
         $this->getMain()->result = $this->getMain()->prepare->execute();
+
+        PermissionManager::getInstance()->addPermission(new Permission("teleportationsx.warp.$label"));
+        $opPerm = PermissionManager::getInstance()->getPermission(DefaultPermissions::ROOT_OPERATOR);
+        $opPerm->addChild("teleportationsx.warp.$label", true);
+    }
+
+    /**
+     * @return TeleportationsX
+     */
+    private function getMain(): TeleportationsX {
+        return TeleportationsX::getInstance();
     }
 
     /**
@@ -39,29 +52,17 @@ class WarpManager {
         $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
         $this->getMain()->result = $this->getMain()->prepare->execute();
         $sql = DataManager::rowsCount();
-        if( count($sql) > 0 ) {
+        if(count($sql) > 0) {
             $this->getMain()->prepare = $this->getMain()->db2->prepare("DELETE FROM warps WHERE label = :label");
             $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
             $this->getMain()->result = $this->getMain()->prepare->execute();
         }
-    }
 
-    /**
-     * @param string $label
-     * @return Position|null
-     */
-    public function getWarp(string $label): ?Position {
-        $this->getMain()->prepare = $this->getMain()->db2->prepare("SELECT label,x,y,z,world FROM warps WHERE label = :label");
-        $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
-        $this->getMain()->result = $this->getMain()->prepare->execute();
-        $sql = DataManager::rowsCount();
-        var_dump($sql);
-        if(count($sql) > 0){
-            $sql = $sql[0];
-            $world = Server::getInstance()->getWorldManager()->getWorldByName($sql["world"]);
-            return new Position($sql["x"], $sql["y"], $sql["z"], $world);
+        PermissionManager::getInstance()->removePermission(PermissionManager::getInstance()->getPermission("teleportationsx.warp.$label"));
+        $opPerm = PermissionManager::getInstance()->getPermission(DefaultPermissions::ROOT_OPERATOR);
+        if(in_array("teleportationsx.warp.$label", $opPerm->getChildren())) {
+            $opPerm->removeChild("teleportationsx.warp.$label");
         }
-        return null;
     }
 
     /**
@@ -82,10 +83,21 @@ class WarpManager {
     }
 
     /**
-     * @return TeleportationsX
+     * @param string $label
+     * @return Position|null
      */
-    private function getMain(): TeleportationsX {
-        return TeleportationsX::getInstance();
+    public function getWarp(string $label): ?Position {
+        $this->getMain()->prepare = $this->getMain()->db2->prepare("SELECT label,x,y,z,world FROM warps WHERE label = :label");
+        $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
+        $this->getMain()->result = $this->getMain()->prepare->execute();
+        $sql = DataManager::rowsCount();
+        var_dump($sql);
+        if(count($sql) > 0) {
+            $sql = $sql[0];
+            $world = Server::getInstance()->getWorldManager()->getWorldByName($sql["world"]);
+            return new Position($sql["x"], $sql["y"], $sql["z"], $world);
+        }
+        return null;
     }
 
 }

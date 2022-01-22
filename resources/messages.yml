@@ -1,0 +1,67 @@
+no_perm: "&cYou don't have permission to use this command"
+not_player: "&cPlease use this command in-game"
+invalid_player: "&cInvalid player"
+
+home_usage: "/home [name]"
+home_description: "Teleport to your home"
+addhome_usage: "/addhome [name]"
+addhome_description: "Add a home"
+removehome_usage: "/removehome [name]"
+removehome_description: "Remove a home"
+homes_usage: "/homes"
+homes_description: "Get a list of all available homes"
+# Use {HOMELIST} for the list of homes
+home_list: "&aHomes: &6{HOMELIST}"
+home_already_exists: "&cThis home already exists. You must remove it first"
+home_added_successfully: "&aHome added successfully"
+home_doesnt_exist: "&cThis home doesn't exist. You must add it first"
+home_removed_successfully: "&aSuccessfully removed this home"
+# Use {HOME} for the name of the home that the player has been teleported to
+teleported_to_home_successfully: "&aYou have been teleported to home: &6{HOME}"
+
+warp_usage: "/warp [name]"
+warp_description: "Teleport to a server warp"
+addwarp_usage: "/addwarp [name]"
+addwarp_description: "Add a warp to the server"
+removewarp_usage: "/removewarp [name]"
+removewarp_description: "Remove a warp from the server"
+warps_usage: "/warps"
+warps_description: "Get a list of all available warps"
+# Use {WARPLIST} for the list of warps
+warp_list: "&aWarps: &6{WARPLIST}"
+warp_already_exists: "&cThis warp already exists. You must remove it first"
+warp_added_successfully: "&aWarp added successfully"
+warp_doesnt_exist: "&cThis warp doesn't exist. You must add it first"
+warp_remove_successfully: "&aSuccessfully removed this warp"
+# Use {WARP} for the name of the warp that the player has been teleported to
+teleported_to_warp_successfully: "&aYou have been teleported to warp: &6{WARP}"
+no_perm_for_this_warp: "&cYou don't have permission to use this warp"
+
+spawn_usage: "/spawn"
+spawn_description: "Teleport to the server spawn"
+setspawn_usage: "/setspawn"
+setspawn_description: "Teleport to the server"
+spawn_set_successfully: "&aServer spawn updated!"
+teleported_to_spawn_successfully: "&aTeleported to spawn"
+
+teleport_request_send_usage: "/tpr [player]"
+teleport_request_send_description: "Send a teleport request to a player"
+teleport_request_accept_usage: "/tpa [player]"
+teleport_request_accept_description: "Accept a teleport request from a player"
+teleport_request_deny_usage: "/tpd [player]"
+teleport_request_deny_description: "Deny a teleport request from a player"
+# Use {RECEIVER} for the name of the person who the teleport request was sent to
+teleport_request_send: "&aYou've sent a teleport request to &f{RECEIVER}"
+# Use {SENDER} for the name of the person who sent the teleport request
+# Use {VALIDITY_TIME} for the validity time of the teleport request (configurable in config.yml file)
+teleport_request_received: "&f{SENDER} &ahas sent you a teleport request\n&aAccept using &f/tpa {SENDER}\n&aDeny using &f/tpd {SENDER}\n&aYou have &f{VALIDITY_TIME} seconds &ato respond"
+# Use {SENDER} for the name of the person whose teleport request was denied
+receiver_teleport_request_denied: "&cYou have denied &f{SENDER}'s &ateleport request"
+# Use {RECEIVER} for the name of the person who denied the teleport request
+sender_teleport_request_denied: "&f{RECEIVER} &chas denied your teleport request"
+receiver_teleport_request_accepted: "&aTeleporting..."
+# Use {RECEIVER} for the name of the person who accepted the teleport request
+sender_teleport_request_accepted: "&f{RECEIVER} &ahas accepted your teleport request"
+cannot_send_request_to_yourself: "&cYou cannot send a teleport request to yourself"
+already_active_request: "&cYou already have an active request to this player"
+no_active_request: "&cYou don't have an active request from this player"

@@ -35,3 +35,12 @@ permissions:
   teleportationsx.delhome:
     default: op
     description: Remove a home
+  teleportationsx.teleportrequest:
+    default: op
+    description: Send a teleport request to a player
+  teleportationsx.teleportaccept:
+    default: op
+    description: Accept someone's teleport request
+  teleportationsx.teleportdeny:
+    default: op
+    description: Deny someone's teleport request

@@ -7,17 +7,17 @@ use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
-use pocketmine\utils\TextFormat as C;
+use Rushil13579\TeleportationsX\managers\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
 
 class SpawnCommand extends Command implements PluginOwned {
 
     public function __construct() {
         parent::__construct("spawn");
-        $this->setDescription("Teleport to the server spawn!");
-        $this->setUsage("/spawn");
+        $this->setDescription(DataManager::getMessage("spawn_description"));
+        $this->setUsage(DataManager::getMessage("spawn_usage"));
         $this->setPermission("teleportationsx.spawn");
-        $this->setPermissionMessage(C::RED . "You don't have permission to use this command'");
+        $this->setPermissionMessage(DataManager::getMessage("no_perm"));
     }
 
     /**
@@ -28,7 +28,7 @@ class SpawnCommand extends Command implements PluginOwned {
      */
     public function execute(CommandSender $sender, string $commandLabel, array $args) {
         if(!$sender instanceof Player) {
-            $sender->sendMessage(C::RED . "Please use this command in-game");
+            $sender->sendMessage(DataManager::getMessage("not_player"));
             return;
         }
 
@@ -37,6 +37,7 @@ class SpawnCommand extends Command implements PluginOwned {
 
         $spawnPos = TeleportationsX::getInstance()->getSpawnManager()->getSpawn();
         $sender->teleport($spawnPos);
+        $sender->sendMessage(DataManager::getMessage("teleported_to_spawn_successfully"));
     }
 
     /**

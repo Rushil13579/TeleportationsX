@@ -4,7 +4,6 @@ namespace Rushil13579\TeleportationsX\managers;
 
 use pocketmine\Server;
 use pocketmine\world\Position;
-use Rushil13579\TeleportationsX\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
 
 class HomeManager {
@@ -35,6 +34,13 @@ class HomeManager {
     }
 
     /**
+     * @return TeleportationsX
+     */
+    private function getMain(): TeleportationsX {
+        return TeleportationsX::getInstance();
+    }
+
+    /**
      * @param string $owner
      * @param string $label
      */
@@ -44,31 +50,12 @@ class HomeManager {
         $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
         $this->getMain()->result = $this->getMain()->prepare->execute();
         $sql = DataManager::rowsCount();
-        if( count($sql) > 0 ) {
+        if(count($sql) > 0) {
             $this->getMain()->prepare = $this->getMain()->db2->prepare("DELETE FROM homes WHERE label = :label AND owner = :owner");
             $this->getMain()->prepare->bindValue(":owner", $owner, SQLITE3_TEXT);
             $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
             $this->getMain()->result = $this->getMain()->prepare->execute();
         }
-    }
-
-    /**
-     * @param string $owner
-     * @param string $label
-     * @return Position|null
-     */
-    public function getHome(string $owner, string $label): ?Position {
-        $this->getMain()->prepare = $this->getMain()->db2->prepare("SELECT owner,label,x,y,z,world FROM homes WHERE label = :label AND owner = :owner");
-        $this->getMain()->prepare->bindValue(":owner", $owner, SQLITE3_TEXT);
-        $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
-        $this->getMain()->result = $this->getMain()->prepare->execute();
-        $sql = DataManager::rowsCount();
-        if(count($sql) > 0){
-            $sql = $sql[0];
-            $world = Server::getInstance()->getWorldManager()->getWorldByName($sql["world"]);
-            return new Position($sql["x"], $sql["y"], $sql["z"], $world);
-        }
-        return null;
     }
 
     /**
@@ -92,10 +79,22 @@ class HomeManager {
     }
 
     /**
-     * @return TeleportationsX
+     * @param string $owner
+     * @param string $label
+     * @return Position|null
      */
-    private function getMain(): TeleportationsX {
-        return TeleportationsX::getInstance();
+    public function getHome(string $owner, string $label): ?Position {
+        $this->getMain()->prepare = $this->getMain()->db2->prepare("SELECT owner,label,x,y,z,world FROM homes WHERE label = :label AND owner = :owner");
+        $this->getMain()->prepare->bindValue(":owner", $owner, SQLITE3_TEXT);
+        $this->getMain()->prepare->bindValue(":label", $label, SQLITE3_TEXT);
+        $this->getMain()->result = $this->getMain()->prepare->execute();
+        $sql = DataManager::rowsCount();
+        if(count($sql) > 0) {
+            $sql = $sql[0];
+            $world = Server::getInstance()->getWorldManager()->getWorldByName($sql["world"]);
+            return new Position($sql["x"], $sql["y"], $sql["z"], $world);
+        }
+        return null;
     }
 
 }

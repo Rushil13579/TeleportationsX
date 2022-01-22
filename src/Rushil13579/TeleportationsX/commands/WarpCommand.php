@@ -7,17 +7,17 @@ use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
+use Rushil13579\TeleportationsX\managers\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
-use pocketmine\utils\TextFormat as C;
 
 class WarpCommand extends Command implements PluginOwned {
 
     public function __construct() {
         parent::__construct("warp");
-        $this->setDescription("Teleport to a warp");
-        $this->setUsage("/warp [name]");
+        $this->setDescription(DataManager::getMessage("warp_description"));
+        $this->setUsage(DataManager::getMessage("warp_usage"));
         $this->setPermission("teleportationsx.warp");
-        $this->setPermissionMessage(C::RED . "You don't have permission to use this command");
+        $this->setPermissionMessage(DataManager::getMessage("no_perm"));
     }
 
 
@@ -28,16 +28,16 @@ class WarpCommand extends Command implements PluginOwned {
      * @return mixed|void
      */
     public function execute(CommandSender $sender, string $commandLabel, array $args) {
-        if(!$sender instanceof Player){
-            $sender->sendMessage(C::RED . "Please use this command in-game");
+        if(!$sender instanceof Player) {
+            $sender->sendMessage(DataManager::getMessage("not_player"));
             return;
         }
 
         if(!$this->testPermission($sender))
             return;
 
-        if(count($args) < 1){
-            $sender->sendMessage(C::RED . $this->getUsage());
+        if(count($args) < 1) {
+            $sender->sendMessage(DataManager::getMessage("warp_usage"));
             return;
         }
 
@@ -45,13 +45,19 @@ class WarpCommand extends Command implements PluginOwned {
 
         $warpManager = TeleportationsX::getInstance()->getWarpManager();
 
-        if(!$warpManager->warpExists($name)){
-            $sender->sendMessage(C::RED . "Invalid warp");
+        if(!$warpManager->warpExists($name)) {
+            $sender->sendMessage(DataManager::getMessage("warp_doesnt_exist"));
+            return;
+        }
+
+        if(!$sender->hasPermission("teleportationsx.warp.$name")) {
+            $sender->sendMessage(DataManager::getMessage("no_perm_for_this_warp"));
             return;
         }
 
         $warp = $warpManager->getWarp($name);
         $sender->teleport($warp);
+        $sender->sendMessage(DataManager::getMessage("teleported_to_warp_successfully", ["WARP" => $name]));
     }
 
     /**

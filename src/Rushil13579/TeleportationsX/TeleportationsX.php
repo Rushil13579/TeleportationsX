@@ -14,10 +14,15 @@ use Rushil13579\TeleportationsX\commands\HomeCommand;
 use Rushil13579\TeleportationsX\commands\HomesCommand;
 use Rushil13579\TeleportationsX\commands\SetSpawnCommand;
 use Rushil13579\TeleportationsX\commands\SpawnCommand;
+use Rushil13579\TeleportationsX\commands\TeleportAcceptCommand;
+use Rushil13579\TeleportationsX\commands\TeleportDenyCommand;
+use Rushil13579\TeleportationsX\commands\TeleportRequestCommand;
 use Rushil13579\TeleportationsX\commands\WarpCommand;
 use Rushil13579\TeleportationsX\commands\WarpsCommand;
+use Rushil13579\TeleportationsX\managers\DataManager;
 use Rushil13579\TeleportationsX\managers\HomeManager;
 use Rushil13579\TeleportationsX\managers\SpawnManager;
+use Rushil13579\TeleportationsX\managers\TeleportRequestManager;
 use Rushil13579\TeleportationsX\managers\WarpManager;
 use SQLite3;
 use SQLite3Result;
@@ -36,10 +41,12 @@ class TeleportationsX extends PluginBase {
     public SQLite3 $db2;
     /** @var SpawnManager */
     private SpawnManager $spawnManager;
-    /** @var WarpManager  */
+    /** @var WarpManager */
     private WarpManager $warpManager;
-    /** @var HomeManager  */
+    /** @var HomeManager */
     private HomeManager $homeManager;
+    /** @var TeleportRequestManager */
+    private TeleportRequestManager $teleportRequestManager;
 
     /**
      * @return TeleportationsX
@@ -69,12 +76,20 @@ class TeleportationsX extends PluginBase {
         return $this->homeManager;
     }
 
+    /**
+     * @return TeleportRequestManager
+     */
+    public function getTeleportRequestManager(): TeleportRequestManager {
+        return $this->teleportRequestManager;
+    }
+
     public function onEnable(): void {
         self::$instance = $this;
 
         $this->spawnManager = new SpawnManager();
         $this->warpManager = new WarpManager();
         $this->homeManager = new HomeManager();
+        $this->teleportRequestManager = new TeleportRequestManager();
 
         try {
             if(!file_exists($this->getDataFolder() . "TeleportationX.db")) {
@@ -90,7 +105,6 @@ class TeleportationsX extends PluginBase {
 
         DataManager::init();
         $this->registerCommands();
-
     }
 
     private function registerCommands(): void {
@@ -105,11 +119,12 @@ class TeleportationsX extends PluginBase {
         $commandMap->register("TeleportationsX", new HomesCommand());
         $commandMap->register("TeleportationsX", new AddHomeCommand());
         $commandMap->register("TeleportationsX", new DelHomeCommand());
+        $commandMap->register("TeleportationsX", new TeleportRequestCommand());
+        $commandMap->register("TeleportationsX", new TeleportAcceptCommand());
+        $commandMap->register("TeleportationsX", new TeleportDenyCommand());
     }
 
     public function onDisable(): void {
-        if($this->prepare) {
-            $this->prepare->close();
-        }
+        $this->prepare->close();
     }
 }
