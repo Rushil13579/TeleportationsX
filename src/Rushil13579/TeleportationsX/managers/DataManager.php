@@ -91,7 +91,7 @@ class DataManager {
         }
         if(is_array($placeHolders)) {
             foreach ($placeHolders as $placeHolder => $value) {
-                $msg = str_replace("{" . $placeHolder . "}", $value, $msg);
+                $msg = str_replace("{" . $placeHolder . "}", (string)$value, $msg);
             }
         }
         return TextFormat::colorize($msg);

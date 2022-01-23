@@ -8,6 +8,7 @@ use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 use Rushil13579\TeleportationsX\managers\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
 
@@ -38,7 +39,7 @@ class TeleportRequestCommand extends Command implements PluginOwned {
             return;
 
         if(count($args) < 1) {
-            $sender->sendMessage(DataManager::getMessage("teleport_request_send_usage"));
+            $sender->sendMessage(TextFormat::RED . "Usage: " . DataManager::getMessage("teleport_request_send_usage"));
             return;
         }
 
@@ -49,13 +50,14 @@ class TeleportRequestCommand extends Command implements PluginOwned {
             return;
         }
 
-        if($sender->getUniqueId()->getBytes() === $receiver->getUniqueId()->getBytes()) {
+        if($sender->getName() === $receiver->getName()) {
             $sender->sendMessage(DataManager::getMessage("cannot_send_request_to_yourself"));
+            return;
         }
 
         $teleportRequestManager = TeleportationsX::getInstance()->getTeleportRequestManager();
 
-        if(!$teleportRequestManager->requestExists($sender, $receiver)) {
+        if($teleportRequestManager->requestExists($sender, $receiver)) {
             $sender->sendMessage(DataManager::getMessage("already_active_request"));
             return;
         }

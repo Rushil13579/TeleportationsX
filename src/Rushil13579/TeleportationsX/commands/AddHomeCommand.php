@@ -7,6 +7,7 @@ use pocketmine\command\CommandSender;
 use pocketmine\player\Player;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginOwned;
+use pocketmine\utils\TextFormat;
 use Rushil13579\TeleportationsX\managers\DataManager;
 use Rushil13579\TeleportationsX\TeleportationsX;
 
@@ -37,7 +38,7 @@ class AddHomeCommand extends Command implements PluginOwned {
             return;
 
         if(count($args) < 1) {
-            $sender->sendMessage(DataManager::getMessage("addhome_usage"));
+            $sender->sendMessage(TextFormat::RED . "Usage: " . DataManager::getMessage("addhome_usage"));
             return;
         }
 

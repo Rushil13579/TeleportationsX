@@ -47,8 +47,6 @@ class TeleportRequestManager {
             foreach ($this->requests[$receiver] as $key => $request) {
                 if($sender === $request[0] and $request[1] >= time()) {
                     return true;
-                } else {
-                    unset($this->requests[$receiver][$key]);
                 }
             }
         }
